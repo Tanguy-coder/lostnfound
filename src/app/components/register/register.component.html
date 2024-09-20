@@ -1,0 +1,67 @@
+<div class="middle-box loginscreen animated fadeInDown ">
+  <div>
+      <div>
+
+          <h4 class="logo-name">IN+</h4>
+
+      </div>
+      <h3 class="text-center">Bienvenue LNF</h3>
+      <p  class="text-center">Veuillez vous inscrire.</p>
+      <form #myForm="ngForm" class="m-t" role="form" novalidate>
+          <div class="form-group">
+              <input type="text" class="form-control" name="name" [(ngModel)]="formData.name" placeholder="Votre nom complet" required="">
+              <div class="text-danger" c *ngIf="myForm.submitted && !myForm.controls['name']?.valid">
+                {{ errorMessage }}
+              </div>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" name="username" [(ngModel)]="formData.username" placeholder="Username" required="">
+            <div class="text-danger" c *ngIf="myForm.submitted && !myForm.controls['username']?.valid">
+              {{ errorMessage }}
+            </div>
+          </div>
+          <div class="form-group">
+            <input type="email" class="form-control" name="email" [(ngModel)]="formData.email" placeholder="Email" required="">
+            <div class="text-danger" c *ngIf="myForm.submitted && !myForm.controls['email']?.valid">
+              {{ errorMessage }}
+            </div>
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control" name="password" [(ngModel)]="formData.password" placeholder="Mot de pass" required="">
+            <div class="text-danger" c *ngIf="myForm.submitted && !myForm.controls['password']?.valid">
+              {{ errorMessage }}
+            </div>
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control" name="confirmePassword" [(ngModel)]="formData.confirmePassword" placeholder="Mot de pass" required="">
+            <div class="text-danger" c *ngIf="myForm.submitted && !myForm.controls['confirmePassword']?.valid">
+              {{ errorMessage }}
+            </div>
+          </div>
+          <div class="form-group">
+            <select class="form-control m-b" name="role" [(ngModel)]="formData.role">
+              <option>Choisir le role</option>
+              <option>option 2</option>
+              <option>option 3</option>
+              <option>option 4</option>
+            </select>
+            <div class="text-danger" c *ngIf="myForm.submitted && !myForm.controls['role']?.valid">
+              {{ errorMessage }}
+            </div>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" name="telephone" [(ngModel)]="formData.telephone" placeholder="telephone" required="">
+            <div class="text-danger" c *ngIf="myForm.submitted && !myForm.controls['telephone']?.valid">
+              {{ errorMessage }}
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary block full-width m-b" [disabled]="isSubmited">S'inscrire</button>
+
+          <a href="#"><small>Forgot password?</small></a>
+          <p class="text-muted text-center"><small>Vous avez un compte?</small></p>
+          <a class="btn btn-sm btn-white btn-block" href="login">Se connecter</a>
+      </form>
+      <p class="m-t"> <small>CopyRight &copy; UNCHK 2024</small> </p>
+  </div>
+</div>
