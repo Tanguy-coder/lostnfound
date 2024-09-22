@@ -7,10 +7,10 @@ import { Observable } from 'rxjs';
 })
 export class ApiServiceService {
 
-  private loginUrl = "http://localhost:8080/login"
+  private registerUrl = "http://localhost:8080/register"
   constructor(private http :HttpClient) { }
 
   submitRegisterUser(formData: any):Observable <any>{
-    return this.http.post(this.loginUrl,formData);
+    return this.http.post(this.registerUrl,formData);
   }
 }

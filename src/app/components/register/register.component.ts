@@ -24,7 +24,7 @@ export class RegisterComponent {
     email: "",
     password: "",
     confirmePassword: "",
-    role: "",
+    role: "Admin",
     telephone:""
   }
 
