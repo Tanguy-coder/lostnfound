@@ -8,9 +8,14 @@ import { Observable } from 'rxjs';
 export class ApiServiceService {
 
   private registerUrl = "http://localhost:8080/register"
+  private rolesUrl = "http://localhost:8080/roles"
   constructor(private http :HttpClient) { }
 
   submitRegisterUser(formData: any):Observable <any>{
     return this.http.post(this.registerUrl,formData);
+  }
+
+  getRoles():Observable <any>{
+    return this.http.get(this.rolesUrl)
   }
 }
