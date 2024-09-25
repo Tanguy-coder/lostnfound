@@ -9,6 +9,7 @@ export class ApiServiceService {
 
   private registerUrl = "http://localhost:8080/register"
   private rolesUrl = "http://localhost:8080/roles"
+  private baseUrl: string = 'http://localhost:8080';
   constructor(private http :HttpClient) { }
 
   submitRegisterUser(formData: any):Observable <any>{
@@ -18,4 +19,9 @@ export class ApiServiceService {
   getRoles():Observable <any>{
     return this.http.get(this.rolesUrl)
   }
+
+  public loginUser(formData: { email: string; password: string }): Observable<any> {
+    return this.http.post(`${this.baseUrl}/login`, formData);
+  }
+  
 }

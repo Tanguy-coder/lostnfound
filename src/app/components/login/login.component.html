@@ -7,16 +7,16 @@
       </div>
       <h3>Welcome to IN+</h3>
       <p>Login in. To see it in action.</p>
-      <form #myForm="ngForm" class="m-t" role="form" action="" novalidate>
+      <form #myForm="ngForm" class="m-t" role="form"  novalidate (ngSubmit)="login()" method="post">
           <div class="form-group">
-              <input type="email" class="form-control" [(ngModel)]="formData.email" name="email" placeholder="Username" required="">
-              <div class="text-danger" *ngIf="myForm.submitted && !myForm.controls['name']?.valid">
+              <input type="email" class="form-control" [(ngModel)]="formData.email" name="email" placeholder="email" required="">
+              <div class="text-danger" *ngIf="myForm.submitted && !myForm.controls['email']?.valid">
                 {{ errorMessage }}
               </div>
           </div>
           <div class="form-group">
-              <input type="password" class="form-control" placeholder="Password" name="password" required="">
-              <div class="text-danger" *ngIf="myForm.submitted && !myForm.controls['name']?.valid">
+              <input type="password" class="form-control" placeholder="Password" name="password" required="" [(ngModel)]="formData.password">
+              <div class="text-danger" *ngIf="myForm.submitted && !myForm.controls['password']?.valid">
                 {{ errorMessage }}
               </div>
           </div>

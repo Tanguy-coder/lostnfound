@@ -8,7 +8,7 @@
       <h3 class="text-center">Bienvenue LNF</h3>
       <p  class="text-center">Veuillez vous inscrire.</p>
       <span class="text-danger">{{ errorMessage }}</span>
-      <form #myForm="ngForm" class="m-t" role="form" novalidate (ngSubmit)="register()">
+      <form #myForm="ngForm" class="m-t" role="form" novalidate (ngSubmit)="register()" method="post">
           <div class="form-group">
               <input type="text" class="form-control" name="name" [(ngModel)]="formData.name" placeholder="Votre nom complet" required="">
               <div class="text-danger" c *ngIf="myForm.submitted && !myForm.controls['name']?.valid">
