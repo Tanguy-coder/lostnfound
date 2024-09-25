@@ -1,0 +1,138 @@
+.jumbotron {
+  background-image: url('/assets/img/illustrations/undraw_searching_re_3ra9.svg');
+  background-size: cover;
+  background-position: center;
+  /* color: white; */
+  padding: 100px 30px;
+  text-align: center;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+h1{
+  font-weight: bold;
+}
+/* Global styles for the sections */
+h1 {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Section: Pourquoi nous choisir */
+.col-md-4 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.col-md-4 i {
+  color: #1cb494;
+  margin-bottom: 15px;
+}
+
+.col-md-4 h4 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.col-md-4 p {
+  font-size: 14px;
+  /* color: #1cb494; */
+}
+
+/* Section: Témoignages */
+blockquote {
+  background: #f9f9f9;
+  border-left: 5px solid #1cb494;
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  border-radius: 5px;
+}
+
+blockquote p {
+  font-style: italic;
+  font-size: 16px;
+}
+
+blockquote footer {
+  font-size: 14px;
+  color: #777;
+  margin-top: 10px;
+}
+
+/* Section: Statistiques */
+.row .col-md-3 {
+  background-color: #ecf0f1;
+  padding: 20px;
+  border-radius: 10px;
+  /* box-shadow: 0 3px 6px rgba(0,0,0,0.1); */
+  margin-bottom: 30px;
+}
+
+.row .col-md-3 h2 {
+  font-size: 36px;
+  color: #1cb494;
+  font-weight: bold;
+}
+
+.row .col-md-3 p {
+  font-size: 14px;
+  color: #666;
+}
+
+/* Buttons and Call-to-Action */
+.btn-primary {
+  background-color: #1cb494;
+  border-color: #1cb494;
+  font-weight: bold;
+  padding: 10px 20px;
+}
+
+.btn-primary:hover {
+  background-color: #1cb494;
+  border-color: #1cb494;
+}
+
+.btn-custom {
+  background-color: #1cb49d;
+  border-color: #1cb49d;
+  color: white;
+  font-weight: bold;
+  padding: 10px 20px;
+}
+
+.btn-custom:hover {
+  background-color: #13977c;
+  border-color: #13977c;
+  color: white;
+}
+
+/* Style du bouton secondaire (bouton outline) */
+.btn-custom-outline {
+  background-color: transparent;
+  border: 2px solid #1cb49d;
+  color: #1cb49d;
+  font-weight: bold;
+  padding: 10px 20px;
+}
+
+.btn-custom-outline:hover {
+  background-color: #1cb49d;
+  color: white;
+}
+/* Container for the buttons */
+.btn-container {
+  display: flex;
+  justify-content: center;
+  grid-area: 50px;
+  margin-top: 20px;
+}
+
+/* Button custom styles */
+.btn-custom, .btn-custom-outline {
+  margin: 0 10px; 
+  padding: 10px 20px;
+}
