@@ -4,6 +4,9 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/site/home/home.component';
+import { AnnonceComponent } from './annonce/annonce.component';
+import { AuthGuard } from './auth.guard';
+import { UsersComponent } from './users/users.component';
 
 // Déclaration des routes
 export const routes: Routes = [
@@ -14,11 +17,28 @@ export const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent,
+    
+  },
+
+  {
+
+    path:'form',
+    component:AnnonceComponent,
+    canActivate:[AuthGuard]
+
+
   },
 
   {
     path: '',
     component: HomeComponent,
+    canActivate:[AuthGuard]
+  },
+
+  {
+    path: 'users',
+    component: UsersComponent,
+    canActivate:[AuthGuard]
   },
 
 

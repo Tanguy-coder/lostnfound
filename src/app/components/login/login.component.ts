@@ -30,6 +30,7 @@ export class LoginComponent {
         this.responseData = response;
         console.log('Login successful', response);
         // Redirection après connexion réussie
+        localStorage.setItem('authToken', 'authToken'); //respecter le nom du token a droite
         this.router.navigate(['/']);
       },
       error: (error) => {

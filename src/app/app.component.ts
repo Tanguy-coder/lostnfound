@@ -3,6 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
+import { AnnonceComponent } from './annonce/annonce.component';
+import { User, UserService } from './users.service';
+import { UsersComponent } from './users/users.component';
+
 
 @Component({
   selector: 'app-root',
@@ -11,11 +15,17 @@ import { RegisterComponent } from './components/register/register.component';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {
+
+
+
+
+
+
+export class AppComponent implements OnInit{
 
   title = 'lostnfoundfront';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router,private userService: UserService) {}
 
   isLoginRoute(): boolean {
     return this.router.url === '/login';
@@ -24,4 +34,43 @@ export class AppComponent {
   isRegisterRoute(): boolean {
     return this.router.url === '/register';
   }
+
+
+  logout(): void {
+    // Optionnel : supprimer les informations d'authentification
+    localStorage.removeItem('authToken'); // Ou autre clé si tu utilises un autre stockage
+    this.router.navigate(['/login']); // Rediriger vers la page de connexion
+  }
+
+
+
+
+
+  users: User[] = []; // Stocke les utilisateurs récupérés
+
+
+  ngOnInit(): void {
+    this.userService.getUsers().subscribe(
+      (data: User[]) => {
+        this.users = data;
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des utilisateurs', error);
+      }
+    );
+  }
 }
+
+
+
+
+
+
+
+
+
+
+
+ 
+  
+
