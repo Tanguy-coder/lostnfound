@@ -1,8 +1,8 @@
 <body class="top-navigation">
     <div id="wrapper">
       <div id="page-wrapper" class="gray-bg">
-        
-        
+
+
         <div class="wrapper wrapper-content">
           <div class="container">
             <div class="row">
@@ -10,8 +10,9 @@
                 <div class="ibox float-e-margins">
                   <!-- Header du formulaire avec outils -->
                   <div class="ibox-title">
-                    <h5>Annonce de perte d'objet <small>Veuillez compléter les informations ci-dessous</small></h5>
+                    <h5>Annonce de perte d'objet <small>Veuillez compléter les informations ci-dessous</small></h5><br>
                     <div class="ibox-tools">
+                      <span class="text-danger">{{ errorMessage }}</span>
                       <a class="collapse-link">
                         <i class="fa fa-chevron-up"></i>
                       </a>
@@ -27,41 +28,56 @@
                       </a>
                     </div>
                   </div>
-                  
+
                   <!-- Contenu du formulaire -->
                   <div class="ibox-content">
-                    <form role="form">
+                    <form #myForm="ngForm" role="form" (ngSubmit)="addAnnonce()" novalidate>
                       <div class="form-group">
                         <label for="objectName">Nom de l'objet</label>
-                        <input type="text" id="objectName" class="form-control" placeholder="Exemple : Sac à dos, téléphone, clé..." required>
+                        <input type="text" id="objectName" class="form-control" name="titre" [(ngModel)]="annonce.titre" placeholder="Exemple : Sac à dos, téléphone, clé..." required>
+                        <div class="text-danger" c *ngIf="myForm.submitted && !myForm.controls['titre']?.valid">
+                          Veuillez renseigner ce champ
+                        </div>
                       </div>
-  
+
                       <div class="form-group">
                         <label for="description">Description</label>
-                        <textarea id="description" class="form-control" rows="3" placeholder="Décrivez l'objet en détail..." required></textarea>
+                        <textarea id="description" class="form-control" rows="3" name="description" [(ngModel)]="annonce.description" placeholder="Décrivez l'objet en détail..." required></textarea>
+                        <div class="text-danger" c *ngIf="myForm.submitted && !myForm.controls['description']?.valid">
+                          Veuillez renseigner ce champ
+                        </div>
                       </div>
-  
+
                       <div class="form-group">
                         <label for="location">Lieu de perte</label>
-                        <input type="text" id="location" class="form-control" placeholder="Exemple : Gare du Nord, Parc Monceau..." required>
+                        <input type="text" id="location" class="form-control" name="lieu" [(ngModel)]="annonce.lieu" placeholder="Exemple : Gare du Nord, Parc Monceau..." required>
+                        <div class="text-danger" c *ngIf="myForm.submitted && !myForm.controls['lieu']?.valid">
+                          Veuillez renseigner ce champ
+                        </div>
                       </div>
-  
+
                       <div class="form-group">
                         <label for="date">Date de perte</label>
-                        <input type="date" id="date" class="form-control" required>
+                        <input type="date" id="date" class="form-control" name="date" [(ngModel)]="annonce.date" required>
+                        <div class="text-danger" c *ngIf="myForm.submitted && !myForm.controls['date']?.valid">
+                          Veuillez renseigner ce champ
+                        </div>
                       </div>
-  
+
                       <div class="form-group">
                         <label for="contact">Contact</label>
-                        <input type="text" id="contact" class="form-control" placeholder="Votre numéro de téléphone ou email" required>
+                        <input type="text" id="contact" class="form-control"  name="contact" [(ngModel)]="annonce.contact" placeholder="Votre numéro de téléphone ou email" required>
+                        <div class="text-danger" c *ngIf="myForm.submitted && !myForm.controls['contact']?.valid">
+                          Veuillez renseigner ce champ
+                        </div>
                       </div>
-  
+
                       <div class="form-group">
                         <label for="image">Ajouter une image (facultatif)</label>
-                        <input type="file" id="image" class="form-control">
+                        <input type="file" id="image" class="form-control"  name="image" [(ngModel)]="annonce.image">
                       </div>
-  
-                      <button type="submit" class="btn btn-primary">Publier l'annonce</button>
+
+                      <button type="submit" class="btn btn-primary" >{{ editMode ? "Mettre à jour" : "Publier" }}</button>
                     </form>
                   </div>
                 </div>
@@ -69,13 +85,12 @@
             </div>
           </div>
         </div>
-        
+
         <div class="footer">
           <div class="pull-right">10GB of <strong>250GB</strong> Free.</div>
           <div><strong>Copyright</strong> Example Company &copy; 2024</div>
         </div>
       </div>
     </div>
-  
+
   </body>
-  

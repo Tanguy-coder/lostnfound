@@ -4,7 +4,6 @@ import { ApiServiceService } from '../../services/api-service.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router'; // Import du Router
-import { ErrorServiceService } from '../../services/error-service.service';
 
 @Component({
   selector: 'app-register',
@@ -16,7 +15,7 @@ import { ErrorServiceService } from '../../services/error-service.service';
 export class RegisterComponent implements OnInit {
 
   constructor(private apiService: ApiServiceService, private router: Router) {} // Injection du Router
-  
+
   public responseData: any = null;
   public errorMessage: string = "";
   public passwordMessage: string = "";
@@ -60,7 +59,7 @@ export class RegisterComponent implements OnInit {
       next: (response) => {
         this.isSubmited = true;
         this.responseData = response.data;
-        
+
         // Redirection après succès de l'enregistrement
         console.log('enregistré');
         this.router.navigate(['/login'])
@@ -78,6 +77,7 @@ export class RegisterComponent implements OnInit {
     this.apiService.getRoles().subscribe(
       (response) => {
         this.roles = response;
+        console.log(response)
       },
       (error) => console.log(error)
     );
