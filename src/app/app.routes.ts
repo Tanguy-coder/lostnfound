@@ -7,6 +7,7 @@ import { HomeComponent } from './components/site/home/home.component';
 import { AnnonceComponent } from './annonce/annonce.component';
 import { AuthGuard } from './auth.guard';
 import { UsersComponent } from './users/users.component';
+import { UserEditComponent } from './user-edit/user-edit.component';
 
 // Déclaration des routes
 export const routes: Routes = [
@@ -24,6 +25,15 @@ export const routes: Routes = [
 
     path:'form',
     component:AnnonceComponent,
+    canActivate:[AuthGuard]
+
+
+  },
+
+  {
+
+    path:'user/:userId',
+    component:UserEditComponent,
     canActivate:[AuthGuard]
 
 

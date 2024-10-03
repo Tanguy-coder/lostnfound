@@ -21,11 +21,25 @@ import { UsersComponent } from './users/users.component';
 
 
 
-export class AppComponent implements OnInit{
+export class AppComponent  {
 
   title = 'lostnfoundfront';
 
-  constructor(private router: Router,private userService: UserService) {}
+
+  currentUser: string | null = null;
+  
+
+  constructor(private router: Router,private userService: UserService) { 
+    this.currentUser=localStorage.getItem("currentUser") 
+  
+  
+  
+  }// Récupérer le nom de l'utilisateur actuellement connecté  }
+  
+
+  
+  
+
 
   isLoginRoute(): boolean {
     return this.router.url === '/login';
@@ -39,6 +53,7 @@ export class AppComponent implements OnInit{
   logout(): void {
     // Optionnel : supprimer les informations d'authentification
     localStorage.removeItem('authToken'); // Ou autre clé si tu utilises un autre stockage
+    localStorage.removeItem('currentUser');
     this.router.navigate(['/login']); // Rediriger vers la page de connexion
   }
 
@@ -46,19 +61,6 @@ export class AppComponent implements OnInit{
 
 
 
-  users: User[] = []; // Stocke les utilisateurs récupérés
-
-
-  ngOnInit(): void {
-    this.userService.getUsers().subscribe(
-      (data: User[]) => {
-        this.users = data;
-      },
-      (error) => {
-        console.error('Erreur lors de la récupération des utilisateurs', error);
-      }
-    );
-  }
 }
 
 

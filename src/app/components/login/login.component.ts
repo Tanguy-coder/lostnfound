@@ -3,6 +3,8 @@ import { ApiServiceService } from '../../services/api-service.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { UserService,User } from '../../users.service';
+
 
 @Component({
   selector: 'app-login',
@@ -13,6 +15,7 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
 
+  public currentUser:any
   public responseData: any = null
   public errorMessage: String = ""
   public successMessage: String = ""
@@ -22,15 +25,20 @@ export class LoginComponent {
   };
 
 
-  constructor(private apiService: ApiServiceService, private router: Router) {}
+  constructor(private apiService: ApiServiceService, private router: Router,private userService:UserService) {}
 
   public login() {
     this.apiService.loginUser(this.formData).subscribe({
       next: (response) => {
         this.responseData = response;
         console.log('Login successful', response);
-        // Redirection après connexion réussie
+        localStorage.setItem('currentUser',response.id);
+        console.log('la valeur de current:'+localStorage.getItem('currentUser'));
         localStorage.setItem('authToken', 'authToken'); //respecter le nom du token a droite
+        
+        
+        
+        
         this.router.navigate(['/']);
       },
       error: (error) => {
