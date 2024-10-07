@@ -1,7 +1,5 @@
 import { Component , OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RegisterComponent } from '../../../register/register.component';
-import { LoginComponent } from "../../../login/login.component";
 import { FormsModule } from '@angular/forms';
 import { Annonces } from '../../../../models/annonces';
 import { AnnoncesService } from '../../../../services/annonces.service';
@@ -10,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-annonce',
   standalone: true,
-  imports: [RegisterComponent, LoginComponent, CommonModule,FormsModule],
+  imports: [ CommonModule,FormsModule],
   templateUrl: './annonce.component.html',
   styleUrl: './annonce.component.css'
 })
@@ -21,6 +19,9 @@ export class AnnonceComponent {
       private route: ActivatedRoute,
       private router: Router
     ){}
+
+  public selectedFile: File | null = null;
+  public previewUrl: string | ArrayBuffer | null = null;
 
   annonce : Annonces = new Annonces();
   public responseData: any =null
@@ -56,10 +57,33 @@ export class AnnonceComponent {
 
   }
 
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.previewUrl = e.target?.result ?? null;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
   public addAnnonce(): void {
     if (!this.validateForm()) {
       return
     }
+      const formData = new FormData();
+      formData.append('titre', this.annonce.titre);
+      formData.append('description', this.annonce.description);
+      formData.append('lieu', this.annonce.lieu);
+      formData.append('date', this.annonce.date);
+      formData.append('contact', this.annonce.contact);
+
+      if (this.selectedFile) {
+        formData.append('file', this.selectedFile);
+      }
     if (this.editMode) {
       this.annonceService.updateAnnonce(this.annonce).subscribe((res: any) => {
         this.responseData = res
@@ -71,7 +95,7 @@ export class AnnonceComponent {
       })
 
     } else {
-      this.annonceService.createAnnonce(this.annonce).subscribe(
+      this.annonceService.createAnnonce(formData).subscribe(
         (res: any) => {
           this.responseData = res
           console.log(res)
@@ -103,7 +127,5 @@ export class AnnonceComponent {
         }
     })
   }
-
-
 
 }

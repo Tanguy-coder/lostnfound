@@ -74,7 +74,11 @@
 
                       <div class="form-group">
                         <label for="image">Ajouter une image (facultatif)</label>
-                        <input type="file" id="image" class="form-control"  name="image" [(ngModel)]="annonce.image">
+                        <input type="file" id="image" class="form-control"  name="image" [(ngModel)]="annonce.image" (change)="onFileSelected($event)">
+                        <div *ngIf="previewUrl">
+                          <h3>Aperçu de l'image:</h3>
+                          <img [src]="previewUrl" alt="Preview" width="300">
+                        </div>
                       </div>
 
                       <button type="submit" class="btn btn-primary" >{{ editMode ? "Mettre à jour" : "Publier" }}</button>

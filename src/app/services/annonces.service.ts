@@ -19,8 +19,8 @@ export class AnnoncesService {
     return this.http.get<Annonces>(`${this.baseUrl}/${id}`);
   }
 
-  createAnnonce(annonce: Annonces): Observable<Annonces> {
-    return this.http.post<Annonces>(`${this.baseUrl}`, annonce);
+  createAnnonce(formData: FormData): Observable<Annonces> {
+    return this.http.post<any>(`${this.baseUrl}`, FormData);
   }
 
   updateAnnonce(annonce: Annonces): Observable<Annonces> {
