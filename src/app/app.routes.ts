@@ -9,6 +9,8 @@ import { UsersComponent } from './users/users.component';
 import { UserEditComponent } from './user-edit/user-edit.component';
 import { AnnonceComponent } from './components/site/Annonces/annonce/annonce.component';
 import { ListAnnoncesComponent } from './components/site/Annonces/list-annonces/list-annonces.component';
+import { MessagerieComponent } from './messagerie/messagerie.component';
+import { WebSocketService } from './web-socket.service';
 
 // Déclaration des routes
 export const routes: Routes = [
@@ -33,7 +35,7 @@ export const routes: Routes = [
 
     path:'annonces/create',
     component:AnnonceComponent,
-    // canActivate:[AuthGuard]
+     canActivate:[AuthGuard]
   },
 
   {
@@ -55,11 +57,22 @@ export const routes: Routes = [
 
 
   },
+  {
+
+    path:'msg',
+    component:MessagerieComponent,
+    canActivate:[AuthGuard]
+
+
+  },
+
+
 
   {
     path: '',
     component: HomeComponent,
     canActivate:[AuthGuard]
+    
   },
 
   {
