@@ -29,6 +29,7 @@ export class AnnonceComponent {
   public editMode = false
 
 
+
   private validateForm(): boolean {
     if (!this.annonce.titre || !this.annonce.description ||
       !this.annonce.lieu || !this.annonce.date || !this.annonce.contact) {
@@ -74,16 +75,19 @@ export class AnnonceComponent {
     if (!this.validateForm()) {
       return
     }
-      const formData = new FormData();
-      formData.append('titre', this.annonce.titre);
-      formData.append('description', this.annonce.description);
-      formData.append('lieu', this.annonce.lieu);
-      formData.append('date', this.annonce.date);
-      formData.append('contact', this.annonce.contact);
+    this.annonce.user = localStorage.getItem("currentUser") || "";
+    const formData = new FormData();
+    formData.append('titre', this.annonce.titre);
+    formData.append('description', this.annonce.description);
+    formData.append('lieu', this.annonce.lieu);
+    formData.append('date', this.annonce.date);
+    formData.append('contact', this.annonce.contact);
+    formData.append('user', this.annonce.user);
 
       if (this.selectedFile) {
-        formData.append('file', this.selectedFile);
+        formData.append('image', this.selectedFile);
       }
+
     if (this.editMode) {
       this.annonceService.updateAnnonce(this.annonce).subscribe((res: any) => {
         this.responseData = res
@@ -103,7 +107,7 @@ export class AnnonceComponent {
         },
         (error) => {
           console.log(error)
-          this.errorMessage = error
+          this.errorMessage = error.error.message
         })
     }
 

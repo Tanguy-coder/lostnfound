@@ -31,7 +31,7 @@
 
                   <!-- Contenu du formulaire -->
                   <div class="ibox-content">
-                    <form #myForm="ngForm" role="form" (ngSubmit)="addAnnonce()" novalidate>
+                    <form #myForm="ngForm" role="form" method="POST" (ngSubmit)="addAnnonce()" enctype="multipart/form-data" novalidate>
                       <div class="form-group">
                         <label for="objectName">Nom de l'objet</label>
                         <input type="text" id="objectName" class="form-control" name="titre" [(ngModel)]="annonce.titre" placeholder="Exemple : Sac à dos, téléphone, clé..." required>
@@ -90,10 +90,7 @@
           </div>
         </div>
 
-        <div class="footer">
-          <div class="pull-right">10GB of <strong>250GB</strong> Free.</div>
-          <div><strong>Copyright</strong> Example Company &copy; 2024</div>
-        </div>
+        
       </div>
     </div>
 

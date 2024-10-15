@@ -24,6 +24,7 @@
                   <div *ngFor="let annonce of annonces">
                     <div class="hr-line-dashed"></div>
                   <div class="search-result">
+                     <img [src]="" class="img-responsive img-circle m-b-xs" alt="profile">
                       <h3><a href="#">{{ annonce.titre }}</a></h3>
                       <a href="#" class="search-link">{{ annonce.description }}</a>
                       <p>
@@ -35,7 +36,6 @@
                   </div>
                   <div class="hr-line-dashed"></div>
                   </div>
-
 
                   <div class="text-center">
                       <div class="btn-group">

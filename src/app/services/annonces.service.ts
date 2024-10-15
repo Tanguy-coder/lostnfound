@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { Annonces } from '../models/annonces';
 
 @Injectable({
@@ -20,7 +20,12 @@ export class AnnoncesService {
   }
 
   createAnnonce(formData: FormData): Observable<Annonces> {
-    return this.http.post<any>(`${this.baseUrl}`, FormData);
+    return this.http.post<Annonces>(`${this.baseUrl}`, formData).pipe(
+      catchError((error: any) => {
+        console.error('Erreur lors de la création de l\'annonce', error);
+        return throwError(error);
+      })
+    );
   }
 
   updateAnnonce(annonce: Annonces): Observable<Annonces> {
