@@ -103,6 +103,7 @@ export class AnnonceComponent {
         (res: any) => {
           this.responseData = res
           console.log(res)
+          localStorage.setItem('publicateur', this.responseData.userId);
           this.router.navigate(['/annonces'])
         },
         (error) => {

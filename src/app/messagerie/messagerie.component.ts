@@ -4,6 +4,7 @@ import { Message } from '../message.model';
 import { CommonModule, NgFor } from '@angular/common';
 import { FormsModule, NgForm, NgModel} from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { Annonces } from '../models/annonces';
 
 
 
@@ -19,15 +20,20 @@ import { HttpClient } from '@angular/common/http';
 export class MessagerieComponent implements OnInit, OnDestroy {
   newMessage: string = '';
   messages: Message[] = [];
+  annonces: Annonces[] = [];
+
    m1=Number(localStorage.getItem("currentUser"));
+   s1=Number(localStorage.getItem("publicateur"));
+   
   constructor(private webSocketService: WebSocketService,private httpClient: HttpClient,private cdRef: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.webSocketService.connect();
 
     this.getMessagesByUser(this.m1);
+    this.getAnnonces();
      
-    
+    console.log("s1 retourne",localStorage.getItem('publicateur'));
     // Souscrire aux messages reçus
     this.webSocketService.getMessages().subscribe((message: Message) => {
       this.messages.push(message);
@@ -43,14 +49,16 @@ export class MessagerieComponent implements OnInit, OnDestroy {
     }
 
     
+    
     const message: Message = {
       id: 0, // L'ID sera généré par le serveur
       sender: { id: this.m1, username: 'User1', email: 'user1@example.com' },
-      receiver: { id: 152, username: 'User2', email: 'user2@example.com' },
+      receiver: { id: this.s1, username: 'User2', email: 'user2@example.com' },
       content: this.newMessage,
       sentAt: new Date()
     };
-
+    
+    
     this.webSocketService.sendMessage(message);
     this.newMessage = ''; // Réinitialiser le champ du message
     
@@ -83,6 +91,20 @@ export class MessagerieComponent implements OnInit, OnDestroy {
       (error) => {
         console.error('Erreur lors de la récupération des messages', error);
         
+      }
+    );
+  }
+
+
+  // Méthode pour récupérer les annonces
+  getAnnonces(): void {
+    this.httpClient.get<Annonces[]>('http://localhost:8080/annonces', { responseType: 'json' }).subscribe(
+      (annonces) => {
+        this.annonces = annonces;  // Stocke les annonces récupérées
+        console.log('Annonces récupérées:', this.annonces);
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des annonces', error);
       }
     );
   }

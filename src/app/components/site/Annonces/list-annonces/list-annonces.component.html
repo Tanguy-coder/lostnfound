@@ -1,57 +1,51 @@
 <div class="wrapper wrapper-content animated fadeInRight">
-  <div class="row">
-      <div class="col-lg-12">
-          <div class="ibox float-e-margins">
-              <div class="ibox-content">
-                  <h2>
-                      Liste des annonces
-                  </h2>
-                  <small>Request time  (0.23 seconds)</small>
-
-                  <div class="search-form">
-                      <form action="index.html" method="get">
-                          <div class="input-group">
-                              <input type="text" placeholder="Admin Theme" name="search" class="form-control input-lg">
-                              <div class="input-group-btn">
-                                  <button class="btn btn-lg btn-primary" type="submit">
-                                      Rechercher un objet
-                                  </button>
-                              </div>
-                          </div>
-
-                      </form>
-                  </div>
-                  <div *ngFor="let annonce of annonces">
-                    <div class="hr-line-dashed"></div>
-                  <div class="search-result">
-                     <img [src]="" class="img-responsive img-circle m-b-xs" alt="profile">
-                      <h3><a href="#">{{ annonce.titre }}</a></h3>
-                      <a href="#" class="search-link">{{ annonce.description }}</a>
-                      <p>
-                          Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites
-                          still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
-                      </p>
-                      <a [routerLink]="['edit', annonce.id]" class="btn btn-primary"
-                      routerLinkActive="router-link-active">Editer</a>
-                  </div>
-                  <div class="hr-line-dashed"></div>
-                  </div>
-
-                  <div class="text-center">
-                      <div class="btn-group">
-                          <button class="btn btn-white" type="button"><i class="fa fa-chevron-left"></i></button>
-                          <button class="btn btn-white">1</button>
-                          <button class="btn btn-white  active">2</button>
-                          <button class="btn btn-white">3</button>
-                          <button class="btn btn-white">4</button>
-                          <button class="btn btn-white">5</button>
-                          <button class="btn btn-white">6</button>
-                          <button class="btn btn-white">7</button>
-                          <button class="btn btn-white" type="button"><i class="fa fa-chevron-right"></i> </button>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <h2>Liste des annonces</h2>
+                    <small>Request time (0.23 seconds)</small>
+  
+                    <!-- Barre de recherche -->
+                    <div class="search-form">
+                        <form action="index.html" method="get">
+                            <div class="input-group">
+                                <input type="text" placeholder="Rechercher un objet" name="search" [(ngModel)]="searchTerm" class="form-control input-lg">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-lg btn-primary" type="submit">
+                                        Rechercher
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+  
+                    <!-- Affichage des annonces avec pagination -->
+                    <div *ngFor="let annonce of annonces | paginate: { itemsPerPage: 5, currentPage: page } | filter:searchTerm">
+                        <div class="hr-line-dashed"></div>
+                        <div class="search-result">
+                            <img [src]="'http://localhost:8080'+annonce.image" class="img-responsive img-circle m-b-xs" alt="profile" style="width: 200px;height: 200px;">
+                            <h3><a href="#">{{ annonce.titre }}</a></h3>
+                            <a href="#" class="search-link">{{ annonce.description }}</a>
+                            <p>
+                                De nombreuses versions ont évolué au fil des ans, parfois par accident, parfois intentionnellement.
+                            </p>
+                            <a [routerLink]="['edit', annonce.id]" class="btn btn-primary" routerLinkActive="router-link-active">Editer</a>
+                            <div *ngIf="id_pub != current">
+                                <a [routerLink]="['/msg', annonce.id]" class="btn btn-warning" routerLinkActive="router-link-active">Message</a>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                    </div>
+  
+                    <!-- Pagination -->
+                    <div class="text-center">
+                        <pagination-controls (pageChange)="page = $event"></pagination-controls>
+                    </div>
+  
+                </div>
+            </div>
+        </div>
+    </div>
   </div>
-</div>
+  

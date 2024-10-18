@@ -41,7 +41,7 @@ export const routes: Routes = [
   {
     path:'annonces/edit/:id',
     component: AnnonceComponent,
-    // canActivate:[AuthGuard]
+    canActivate:[AuthGuard]
   },
 
   {
@@ -59,7 +59,7 @@ export const routes: Routes = [
   },
   {
 
-    path:'msg',
+    path:'msg/:id',
     component:MessagerieComponent,
     canActivate:[AuthGuard]
 

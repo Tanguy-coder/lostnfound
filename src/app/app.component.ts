@@ -6,6 +6,10 @@ import { User, UserService } from './users.service';
 import { UsersComponent } from './users/users.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
+import { NgxPaginationModule } from 'ngx-pagination';
+
+
+
 
 
 @Component({

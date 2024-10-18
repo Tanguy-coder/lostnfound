@@ -2,41 +2,29 @@
     <div class="ibox-title">
       <h5>Chat en temps réel</h5>
     </div>
-
-
-    
-    
-    
   
     <div class="ibox-content">
       <div class="messages-box">
         <div *ngFor="let message of messages" class="message">
-         <div *ngIf= "message.sender.id==m1 || message.receiver.id==m1">   
-          <strong>{{ message.sender.username }}:</strong> {{ message.content }}
+          <!-- Afficher uniquement les messages envoyés ou reçus par l'utilisateur connecté -->
+          <div *ngIf="message.sender.id == m1 || message.receiver.id == m1">
 
-        
-          
+              <!-- Si l'utilisateur connecté n'est pas celui qui a publié l'annonce -->
+              
+                <strong>{{ message.sender.username }}:</strong> {{ message.content }}
+              
+            
           </div>
         </div>
-
-        
-
       </div>
   
       <div class="chat-input-box">
-        
         <input type="text" [(ngModel)]="newMessage" required
           placeholder="Écrire un message..."
           (keyup.enter)="sendMessage()"
         />
-        <button (click)="sendMessage()"  [disabled]="newMessage.trim() === ''">Envoyer</button>
+        <button (click)="sendMessage()" [disabled]="newMessage.trim() === ''">Envoyer</button>
       </div>
-
-      
-
-      
-
-
     </div>
   </div>
   
