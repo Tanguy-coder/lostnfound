@@ -1,0 +1,26 @@
+<div class="ibox-content">
+  <h5>Derniers messages par annonce</h5>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Participants</th>
+        <th>Dernier Message</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Boucle sur les discussions regroupées -->
+      <tr *ngFor="let discussion of lastMessages">
+        <td>
+          <!-- Afficher uniquement les discussions où l'utilisateur est impliqué -->
+          <div *ngIf="discussion.message.sender.id === id || discussion.message.receiver.id === id">
+            <!-- Bouton de navigation vers la discussion -->
+            <a [routerLink]="['/msg', discussion.message.id]" class="btn btn-primary btn-block">
+              <strong>{{ discussion.message.sender.username }} et {{ discussion.message.receiver.username }}</strong> :
+              <span>{{ discussion.message.content }}</span>
+            </a>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

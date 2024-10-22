@@ -11,6 +11,7 @@ import { AnnonceComponent } from './components/site/Annonces/annonce/annonce.com
 import { ListAnnoncesComponent } from './components/site/Annonces/list-annonces/list-annonces.component';
 import { MessagerieComponent } from './messagerie/messagerie.component';
 import { WebSocketService } from './web-socket.service';
+import { BoiteComponent } from './boite/boite.component';
 
 // Déclaration des routes
 export const routes: Routes = [
@@ -81,6 +82,12 @@ export const routes: Routes = [
     canActivate:[AuthGuard]
   },
 
+  {
+    path: 'discussions',
+    component: BoiteComponent,
+    canActivate:[AuthGuard]
+  },
+
 
 
   {
@@ -88,6 +95,9 @@ export const routes: Routes = [
     redirectTo: 'login', // Redirection par défaut vers login
     pathMatch: 'full' // Assure-toi que le chemin est complet
   },
+
+  { path: 'discussion', component: BoiteComponent }
+
 
 ];
 

@@ -104,6 +104,7 @@ export class AnnonceComponent {
           this.responseData = res
           console.log(res)
           localStorage.setItem('publicateur', this.responseData.userId);
+          localStorage.setItem('idannonce',this.responseData.id);
           this.router.navigate(['/annonces'])
         },
         (error) => {

@@ -55,6 +55,8 @@ export class MessagerieComponent implements OnInit, OnDestroy {
       sender: { id: this.m1, username: 'User1', email: 'user1@example.com' },
       receiver: { id: this.s1, username: 'User2', email: 'user2@example.com' },
       content: this.newMessage,
+      annonceId:Number(localStorage.getItem('annonceId')),
+      
       sentAt: new Date()
     };
     
