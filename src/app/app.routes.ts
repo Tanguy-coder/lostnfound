@@ -12,6 +12,7 @@ import { ListAnnoncesComponent } from './components/site/Annonces/list-annonces/
 import { MessagerieComponent } from './messagerie/messagerie.component';
 import { WebSocketService } from './web-socket.service';
 import { BoiteComponent } from './boite/boite.component';
+import { RoleComponent } from './role/role.component';
 
 // Déclaration des routes
 export const routes: Routes = [
@@ -42,6 +43,12 @@ export const routes: Routes = [
   {
     path:'annonces/edit/:id',
     component: AnnonceComponent,
+    canActivate:[AuthGuard]
+  },
+
+  {
+    path:'roles/create',
+    component: RoleComponent,
     canActivate:[AuthGuard]
   },
 

@@ -1,0 +1,16 @@
+<!-- role.component.html -->
+<div class="ibox-content">
+    <h5>Ajouter un rôle</h5>
+    <form #roleForm="ngForm" (ngSubmit)="addRole()" novalidate>
+      <div class="form-group">
+        <label for="roleName">Nom du rôle</label>
+        <input type="text" id="roleName" class="form-control" name="roleName" [(ngModel)]="roleName" placeholder="Exemple : Admin, Utilisateur..." required>
+        <div class="text-danger" *ngIf="!roleForm.controls['roleName']?.valid && roleForm.submitted">
+          Veuillez renseigner ce champ
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Enregistrer le rôle</button>
+      <div class="text-danger">{{ errorMessage }}</div>
+    </form>
+  </div>
+  
