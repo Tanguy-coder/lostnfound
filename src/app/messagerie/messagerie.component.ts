@@ -5,7 +5,9 @@ import { CommonModule, NgFor } from '@angular/common';
 import { FormsModule, NgForm, NgModel} from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Annonces } from '../models/annonces';
-
+import { ActivatedRoute } from '@angular/router';
+import { AnnoncesService } from '../services/annonces.service';
+import { UserService } from '../users.service';
 
 
 
@@ -15,73 +17,79 @@ import { Annonces } from '../models/annonces';
   templateUrl: './messagerie.component.html',
   styleUrls: ['./messagerie.component.css'],
   imports:[CommonModule,FormsModule]
-  
+
 })
 export class MessagerieComponent implements OnInit, OnDestroy {
   newMessage: string = '';
   messages: Message[] = [];
   annonces: Annonces[] = [];
+  public annonce: any  = [];
+  public annonceur_id : string = '';
+  public annonceur : any = [];
+  public sender : any = [];
+  m1=Number(localStorage.getItem("currentUser"));
+  s1=Number(localStorage.getItem("publicateur"));
 
-   m1=Number(localStorage.getItem("currentUser"));
-   s1=Number(localStorage.getItem("publicateur"));
-   
-  constructor(private webSocketService: WebSocketService,private httpClient: HttpClient,private cdRef: ChangeDetectorRef) {}
+  constructor(
+          private webSocketService: WebSocketService,
+          private httpClient: HttpClient,
+          private cdRef: ChangeDetectorRef,
+          private route : ActivatedRoute,
+          private annonceServie : AnnoncesService,
+          private userService: UserService
+          ) {}
 
   ngOnInit(): void {
     this.webSocketService.connect();
 
     this.getMessagesByUser(this.m1);
     this.getAnnonces();
-     
-    console.log("s1 retourne",localStorage.getItem('publicateur'));
+
+  /**
+   * Récupérer l'id de l'annonce , récupérer l'annonce pour finalement récupérer le propriéaire de cette annonce
+   */
+    const id = this.route.snapshot.paramMap.get('id');
+    if(id){
+      this.loadAnnonces(parseInt(id))
+      this.loadUser(this.m1)
+    }
+
     // Souscrire aux messages reçus
     this.webSocketService.getMessages().subscribe((message: Message) => {
       this.messages.push(message);
       console.log('Message reçu: ', message);
-      
     });
   }
 
   sendMessage(): void {
-
     if (this.newMessage.trim() === '') {
       return;
     }
 
-    
-    
+    if (!this.annonce || !this.annonce.id || !this.annonceur) {
+      console.error('Données manquantes pour l\'envoi du message.');
+      return;
+    }
+
     const message: Message = {
       id: 0, // L'ID sera généré par le serveur
-      sender: { id: this.m1, username: 'User1', email: 'user1@example.com' },
-      receiver: { id: this.s1, username: 'User2', email: 'user2@example.com' },
+      sender: this.sender,
+      receiver: this.annonceur,
       content: this.newMessage,
-      annonceId:Number(localStorage.getItem('annonceId')),
-      
+      annonce: this.annonce,
       sentAt: new Date()
     };
-    
-    
+
     this.webSocketService.sendMessage(message);
     this.newMessage = ''; // Réinitialiser le champ du message
-    
-  
-    
 
-    setTimeout(() => {
-      this.getMessagesByUser(this.m1);
-      this.cdRef.detectChanges(); // Forcer la mise à jour de l'affichage après l'envoi du message
-    }, 500); // Attendre 500ms avant de récupérer les messages pour permettre à l'envoi
-
-  
-  
+    this.getMessagesByUser(this.m1); // Mise à jour directe
+    this.cdRef.detectChanges(); // Forcer la mise à jour de l'affichage
   }
 
 
- 
-  
-
   getMessagesByUser(userId:number) {
-    
+
     userId=this.m1;
     this.httpClient.get<Message[]>(`http://localhost:8080/msg/${userId}`,{responseType:'json'}).subscribe(
       (messages) => {
@@ -92,11 +100,10 @@ export class MessagerieComponent implements OnInit, OnDestroy {
       },
       (error) => {
         console.error('Erreur lors de la récupération des messages', error);
-        
+
       }
     );
   }
-
 
   // Méthode pour récupérer les annonces
   getAnnonces(): void {
@@ -110,15 +117,31 @@ export class MessagerieComponent implements OnInit, OnDestroy {
       }
     );
   }
-  
 
+  loadAnnonces(id:number ):void{
+    this.annonceServie.getAnnonceById(id).subscribe((res: any) => {
+      this.annonce = res
+        if (this.annonce.user) {
+          this.annonceur = this.annonce.user;
+          console.log('Annonceur:', this.annonceur);
+          this.annonceur_id = this.annonce?.user.id;
+        } else {
+          console.warn('Aucun utilisateur trouvé pour cette annonce');
+          this.annonceur_id = '';
+        }
+    }, (error) => {
+      console.log(error)
+    })
+  }
 
-
-
-
-
-
-
+  loadUser(id: number){
+    this.userService.getById(id).subscribe((res: any) => {
+      this.sender = res
+      console.log('Messager:', this.sender);
+    }, (error) => {
+      console.log(error)
+    })
+  }
   ngOnDestroy(): void {
     this.webSocketService.disconnect();
   }

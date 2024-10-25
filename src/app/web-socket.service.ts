@@ -19,11 +19,19 @@ export class WebSocketService {
     this.stompClient = new Client({
       webSocketFactory: () => socket,
       debug: (str) => { console.log(new Date(), str); },
+      // onConnect: (frame) => {
+      //   console.log('Connected: ' + frame);
+      //   // S'abonner aux messages provenant du backend
+      //   this.stompClient.subscribe('/topic/messages', (messageOutput: any) => {
+      //     console.log('Message reçu: ', JSON.parse(messageOutput.body));
+      //   });
+      // },
       onConnect: (frame) => {
         console.log('Connected: ' + frame);
-        // S'abonner aux messages provenant du backend
         this.stompClient.subscribe('/topic/messages', (messageOutput: any) => {
-          console.log('Message reçu: ', JSON.parse(messageOutput.body));
+          const message = JSON.parse(messageOutput.body);
+          console.log('Message reçu: ', message);
+          this.messagesSubject.next(message); // Ajoute le message reçu au Subject
         });
       },
       onStompError: (frame) => {
@@ -37,6 +45,7 @@ export class WebSocketService {
 
   // Envoyer un message au serveur
   sendMessage(message: Message): void {
+    console.log("Message envoyé",message)
     if (this.stompClient.connected) {
       this.stompClient.publish({ destination: '/app/sendMessage', body: JSON.stringify(message) });
     }

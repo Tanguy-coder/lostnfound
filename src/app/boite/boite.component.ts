@@ -38,7 +38,7 @@ export class BoiteComponent implements OnInit {
   ngOnInit(): void {
     // Récupérer les utilisateurs ayant envoyé des messages
     this.getUsersFromMessages();
-    
+
     // Souscription au WebSocket pour recevoir les nouveaux messages en temps réel
     this.webSocketService.getMessages().subscribe((message: Message) => {
       this.messages.push(message);
@@ -78,7 +78,7 @@ export class BoiteComponent implements OnInit {
 
     this.messages.forEach((message: Message) => {
       // Créer une clé unique pour chaque paire d'utilisateurs et l'annonce, peu importe l'ordre (sender/receiver ou receiver/sender)
-      const participantsKey = [message.sender.username, message.receiver.username].sort().join('-') + '-annonce-' + message.annonceId;
+      const participantsKey = [message.sender.username, message.receiver.username].sort().join('-') + '-annonce-' + message.annonce.id;
 
       // Si la discussion entre ces participants et cette annonce n'existe pas encore, ou si le message est plus récent
       if (!lastMessagesMap.has(participantsKey) || lastMessagesMap.get(participantsKey)!.sentAt < message.sentAt) {
