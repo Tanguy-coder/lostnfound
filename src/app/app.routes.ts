@@ -67,7 +67,7 @@ export const routes: Routes = [
   },
   {
 
-    path:'msg/:id',
+    path:'msg/:id/:annonce.user.id',
     component:MessagerieComponent,
     canActivate:[AuthGuard]
 

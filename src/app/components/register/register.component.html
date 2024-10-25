@@ -39,10 +39,11 @@
               {{ passwordMessage }}
             </div>
           </div>
-          <div class="form-group">
+          <div class="form-group" hidden>
             <select class="form-control m-b" name="role" [(ngModel)]="formData.role" required="">
               <option>Choisir le role</option>
-              <option *ngFor="let role of roles" [value]="role.name">{{ role.name }}</option>
+              
+              <option   value="user"> user </option>
             </select>
             <div class="text-danger" c *ngIf="myForm.submitted && !myForm.controls['role']?.valid">
               Veuillez sélectionner un élément dans la liste

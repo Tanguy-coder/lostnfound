@@ -27,6 +27,7 @@ export class AnnonceComponent {
   public responseData: any =null
   public errorMessage: String =""
   public editMode = false
+  
 
 
 
@@ -102,8 +103,9 @@ export class AnnonceComponent {
       this.annonceService.createAnnonce(formData).subscribe(
         (res: any) => {
           this.responseData = res
-          console.log(res)
-          localStorage.setItem('publicateur', this.responseData.userId);
+          console.log(res);
+          Number(localStorage.setItem('publicateur', this.responseData.userId));
+           Number(localStorage.setItem('publicateur', this.responseData.user.id))
           localStorage.setItem('idannonce',this.responseData.id);
           this.router.navigate(['/annonces'])
         },
