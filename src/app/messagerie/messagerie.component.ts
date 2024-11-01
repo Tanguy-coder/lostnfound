@@ -41,24 +41,32 @@ export class MessagerieComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.webSocketService.connect();
-
-    this.getMessagesByUser(this.m1);
-    this.getAnnonces();
-
   /**
    * Récupérer l'id de l'annonce , récupérer l'annonce pour finalement récupérer le propriéaire de cette annonce
    */
     const id = this.route.snapshot.paramMap.get('id');
     if(id){
-      this.loadAnnonces(parseInt(id))
       this.loadUser(this.m1)
-    }
+      this.loadAnnonces(parseInt(id))
 
+      this.getMessagesByUser(this.m1,1,parseInt(id));
+      this.getAnnonces();
+    }
     // Souscrire aux messages reçus
     this.webSocketService.getMessages().subscribe((message: Message) => {
       this.messages.push(message);
-      console.log('Message reçu: ', message);
+      // console.log('Message reçu: ', message);
     });
+  }
+
+  /***Avant l'initialisation du composant je fais ceci récupérer en avance l'annonce */
+  ngOnChange(){
+    const id = this.route.snapshot.paramMap.get('id');
+
+    if (id) {
+      this.loadAnnonces(parseInt(id))
+
+    }
   }
 
   sendMessage(): void {
@@ -80,21 +88,24 @@ export class MessagerieComponent implements OnInit, OnDestroy {
       sentAt: new Date()
     };
 
+
     this.webSocketService.sendMessage(message);
     this.newMessage = ''; // Réinitialiser le champ du message
 
-    this.getMessagesByUser(this.m1); // Mise à jour directe
+    this.getMessagesByUser(this.m1,parseInt(this.annonceur_id),parseInt(this.annonce.id)); // Mise à jour directe
     this.cdRef.detectChanges(); // Forcer la mise à jour de l'affichage
   }
 
 
-  getMessagesByUser(userId:number) {
+  getMessagesByUser(userId:number, userId2: number, annonceId: number) {
 
-    userId=this.m1;
-    this.httpClient.get<Message[]>(`http://localhost:8080/msg/${userId}`,{responseType:'json'}).subscribe(
+    this.httpClient.get<Message[]>(`http://localhost:8080/msg/${userId}/${userId2}/${annonceId}`,{responseType:'json'}).subscribe(
       (messages) => {
         console.log("mise a jour");
-        this.messages = messages;
+        this.messages = messages.sort((a, b) => {
+          return new Date(a.sentAt).getTime() - new Date(b.sentAt).getTime();
+      });
+        console.log("zdezazeaz",this.messages)
         this.cdRef.detectChanges();
          // Met à jour la liste des messages
       },
