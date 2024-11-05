@@ -33,7 +33,7 @@
                             <div *ngIf="id_pub != current" >
                                 <a *ngIf="current == annonce.user.id" [routerLink]="['edit', annonce.id]" class="btn btn-primary" routerLinkActive="router-link-active">Editer</a>
                                 &nbsp;
-                                <a [routerLink]="['/msg', annonce.id]" class="m-l-3 btn btn-warning" routerLinkActive="router-link-active">Message</a>
+                                <a [routerLink]="['/msg', annonce.id,annonce.user.id]" class="m-l-3 btn btn-warning" routerLinkActive="router-link-active">Message</a>
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>

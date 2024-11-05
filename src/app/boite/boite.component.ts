@@ -9,6 +9,8 @@ import { Message } from '../message.model'; // Modèle message
 import { HttpClient } from '@angular/common/http';
 import { WebSocketService } from '../web-socket.service';
 import { Annonces } from '../models/annonces';
+import { AnnoncesService } from '../services/annonces.service';
+
 
 @Component({
   selector: 'app-boite',
@@ -24,6 +26,8 @@ export class BoiteComponent implements OnInit {
   id = Number(localStorage.getItem('currentUser'));
   lastMessages: { participants: string, message: Message }[] = [];
   public annonces: Annonces[] = [];
+  m1=Number(localStorage.getItem("currentUser"));
+
 
   constructor(
     private route: ActivatedRoute,
@@ -32,22 +36,39 @@ export class BoiteComponent implements OnInit {
     private messageService: MessageService,
     private httpClient: HttpClient,
     private cdRef: ChangeDetectorRef,
-    private webSocketService: WebSocketService
+    private webSocketService: WebSocketService,
+    private annonceService:AnnoncesService,
+    
+    
   ) {}
 
   ngOnInit(): void {
     // Récupérer les utilisateurs ayant envoyé des messages
     this.getUsersFromMessages();
+    this.getAnnonces();
+    this.getAllMessages();
+    
+
+    const  userId=this.route.snapshot.paramMap.get("userId");
+     
+
+    
+
+    console.log("id "+this.m1);
+
+
+  
 
     // Souscription au WebSocket pour recevoir les nouveaux messages en temps réel
     this.webSocketService.getMessages().subscribe((message: Message) => {
       this.messages.push(message);
-      this.groupLastMessagesByDiscussion(); // Regrouper les messages après avoir reçu un nouveau message
+      // Regrouper les messages après avoir reçu un nouveau message
       this.cdRef.detectChanges();  // Détecte et met à jour l'interface
     });
 
-    // Récupérer les messages pour l'utilisateur courant
-    this.getMessagesByUser(this.id);
+   
+
+    console.log("identfiant"+this.m1);
   }
 
   // Récupérer les utilisateurs à partir des messages
@@ -58,23 +79,54 @@ export class BoiteComponent implements OnInit {
   }
 
   // Récupérer les messages par utilisateur
-  getMessagesByUser(userId: number): void {
-    this.httpClient.get<Message[]>(`http://localhost:8080/msg/${userId}`, { responseType: 'json' }).subscribe(
+  getMessagesByUser(userId:number, userId2: number, annonceId: number) {
+
+    this.httpClient.get<Message[]>(`http://localhost:8080/msg/${userId}/${userId2}/${annonceId}`,{responseType:'json'}).subscribe(
       (messages) => {
-        console.log("Mise à jour des messages");
-        this.messages = messages;
-        this.groupLastMessagesByDiscussion(); // Regrouper les messages après les avoir récupérés
-        this.cdRef.detectChanges();  // Détecter les changements pour mettre à jour l'affichage
+        console.log("mise a jour");
+        this.messages = messages.sort((a, b) => {
+          return new Date(a.sentAt).getTime() - new Date(b.sentAt).getTime();
+      });
+        console.log("messages recuperes",this.messages)
+        this.cdRef.detectChanges();
+         // Met à jour la liste des messages
       },
       (error) => {
         console.error('Erreur lors de la récupération des messages', error);
+
       }
     );
+  }
+
+  getAllMessages(): void {
+    this.httpClient.get<Message[]>('http://localhost:8080/messages', { responseType: 'json' }).subscribe(
+      (messages) => {
+        this.messages = messages.sort((a, b) => new Date(a.sentAt).getTime() - new Date(b.sentAt).getTime());
+        console.log('Tous les messages récupérés:', this.messages);
+        this.cdRef.detectChanges(); // Forcer la mise à jour de l'affichage
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération de tous les messages', error);
+      }
+    );
+  }
+
+
+
+
+
+  public getAnnonces(): void {
+    this.annonceService.getAnnonces().subscribe((liste) => {
+      this.annonces = liste
+    })
   }
 
   // Regrouper et afficher uniquement le dernier message par discussion (sender/receiver) sans répétition
   groupLastMessagesByDiscussion(): void {
     const lastMessagesMap = new Map<string, Message>();
+
+  
+    
 
     this.messages.forEach((message: Message) => {
       // Créer une clé unique pour chaque paire d'utilisateurs et l'annonce, peu importe l'ordre (sender/receiver ou receiver/sender)
@@ -83,6 +135,7 @@ export class BoiteComponent implements OnInit {
       // Si la discussion entre ces participants et cette annonce n'existe pas encore, ou si le message est plus récent
       if (!lastMessagesMap.has(participantsKey) || lastMessagesMap.get(participantsKey)!.sentAt < message.sentAt) {
         lastMessagesMap.set(participantsKey, message);
+        
       }
     });
 
@@ -91,5 +144,7 @@ export class BoiteComponent implements OnInit {
       participants,
       message
     }));
+
+   
   }
 }

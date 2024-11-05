@@ -45,26 +45,34 @@ export class MessagerieComponent implements OnInit, OnDestroy {
    * Récupérer l'id de l'annonce , récupérer l'annonce pour finalement récupérer le propriéaire de cette annonce
    */
     const id = this.route.snapshot.paramMap.get('id');
+    const userId2=(this.route.snapshot.paramMap.get("annonce.user.id"));
+
+    console.log("id "+id+"userId2"+userId2 +"m1 :"+this.m1);
+    
+    
     if(id){
       this.loadUser(this.m1)
       this.loadAnnonces(parseInt(id))
 
-      this.getMessagesByUser(this.m1,1,parseInt(id));
+      this.getMessagesByUser(this.m1,Number(userId2),parseInt(id));
       this.getAnnonces();
     }
     // Souscrire aux messages reçus
     this.webSocketService.getMessages().subscribe((message: Message) => {
       this.messages.push(message);
       // console.log('Message reçu: ', message);
+      
     });
   }
 
   /***Avant l'initialisation du composant je fais ceci récupérer en avance l'annonce */
   ngOnChange(){
-    const id = this.route.snapshot.paramMap.get('id');
+    const id = (this.route.snapshot.paramMap.get('id'));
+    const userId2=(this.route.snapshot.paramMap.get("annonce.user.id"));
 
     if (id) {
       this.loadAnnonces(parseInt(id))
+      this.getMessagesByUser(this.m1,Number(userId2),parseInt(id));
 
     }
   }
@@ -92,6 +100,7 @@ export class MessagerieComponent implements OnInit, OnDestroy {
     this.webSocketService.sendMessage(message);
     this.newMessage = ''; // Réinitialiser le champ du message
 
+    //console.log("affichage"+this.annonceur_id +"||" + this.annonce.id);
     this.getMessagesByUser(this.m1,parseInt(this.annonceur_id),parseInt(this.annonce.id)); // Mise à jour directe
     this.cdRef.detectChanges(); // Forcer la mise à jour de l'affichage
   }
@@ -105,7 +114,7 @@ export class MessagerieComponent implements OnInit, OnDestroy {
         this.messages = messages.sort((a, b) => {
           return new Date(a.sentAt).getTime() - new Date(b.sentAt).getTime();
       });
-        console.log("zdezazeaz",this.messages)
+        console.log("messages recuperes",this.messages)
         this.cdRef.detectChanges();
          // Met à jour la liste des messages
       },
@@ -115,6 +124,24 @@ export class MessagerieComponent implements OnInit, OnDestroy {
       }
     );
   }
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
 
   // Méthode pour récupérer les annonces
   getAnnonces(): void {

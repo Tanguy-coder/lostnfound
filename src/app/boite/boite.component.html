@@ -1,23 +1,34 @@
 <div class="ibox-content">
   <h5>Derniers messages par annonce</h5>
-  <table class="table">
-    <thead>
+  <table class="table table-hover">
+    <thead class="thead-light">
       <tr>
-        <th>Participants</th>
-        <th>Dernier Message</th>
+        <th>Conversations</th>
+        
       </tr>
     </thead>
     <tbody>
-      <!-- Boucle sur les discussions regroupées -->
-      <tr *ngFor="let discussion of lastMessages">
-        <td>
-          <!-- Afficher uniquement les discussions où l'utilisateur est impliqué -->
-          <div *ngIf="discussion.message.sender.id === id || discussion.message.receiver.id === id">
-            <!-- Bouton de navigation vers la discussion -->
-            <a [routerLink]="['/msg', discussion.message.id]" class="btn btn-primary btn-block">
-              <strong>{{ discussion.message.sender.username }} et {{ discussion.message.receiver.username }}</strong> :
-              <span>{{ discussion.message.content }}</span>
-            </a>
+      <!-- Boucle sur les annonces -->
+      <tr>
+        
+        <td colspan="2" *ngFor="let annonce of annonces">
+          <div *ngFor="let message of messages.slice(0, 1)">
+            <!-- Afficher uniquement les discussions où l'utilisateur est impliqué -->
+            <div *ngIf="(annonce.id === message.annonce.id) && 
+                         ((message.sender.id == m1 && message.receiver.id != m1) || 
+                          (message.sender.id != m1 && message.receiver.id == m1))" 
+                 class="message-item">
+              <!-- Bouton de navigation vers la discussion -->
+              <a [routerLink]="['/msg', annonce.id, message.receiver.id]" class="message-link">
+                <div class="message-header  justify-content-between">
+                  <strong style="font-size: 15px;">{{ message.sender.username }} &mdash; {{ message.receiver.username }}</strong>
+                  <span class="badge badge-info">{{ annonce.titre }}</span>
+                </div>
+                <div class="message-content">
+                  {{ message.content | slice: 0:50 }}...
+                </div>
+              </a>
+            </div>
           </div>
         </td>
       </tr>
