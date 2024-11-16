@@ -27,7 +27,7 @@ export class RegisterComponent implements OnInit {
     email: "",
     password: "",
     confirmePassword: "",
-    role: "",
+    role: "user",
     telephone: ""
   };
 
@@ -51,24 +51,28 @@ export class RegisterComponent implements OnInit {
   }
 
   // Méthode pour l'inscription
-  public register() {
-    if (!this.validateForm()) {
+  register() {
+    this.isSubmited = true;
+    
+    if (this.formData.password !== this.formData.confirmePassword) {
+      this.passwordMessage = "Les mots de passe ne correspondent pas.";
       return;
     }
+
+    // Appeler le service d'inscription
     this.apiService.submitRegisterUser(this.formData).subscribe({
       next: (response) => {
-        this.isSubmited = true;
-        this.responseData = response.data;
-
-        // Redirection après succès de l'enregistrement
-        console.log('enregistré');
-        this.router.navigate(['/login'])
+        console.log('Inscription réussie', response);
+        this.router.navigate(['login']);
+        this.errorMessage = '';
       },
       error: (error) => {
-        console.log('Erreur lors de l\'enregistrement : ', error);
-        this.errorMessage = error.error.message;
+        if (error.status === 400) {
+          this.errorMessage = error.error.error || 'Erreur lors de l’inscription.';
+        } else {
+          this.errorMessage = 'Une erreur inconnue est survenue.';
+        }
       },
-      complete: () => console.log('completed')
     });
   }
 

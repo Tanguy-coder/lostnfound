@@ -9,4 +9,5 @@ export class Annonces {
   date!: string;
   longitude!: number;
   latitude!: number;
+  status!: string;
 }

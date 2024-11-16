@@ -1,4 +1,4 @@
-import { Component , OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Annonces } from '../../../../models/annonces';
@@ -8,28 +8,33 @@ import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-annonce',
   standalone: true,
-  imports: [ CommonModule,FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './annonce.component.html',
-  styleUrl: './annonce.component.css'
+  styleUrls: ['./annonce.component.css']
 })
-export class AnnonceComponent {
-
-  constructor(
-      private annonceService : AnnoncesService,
-      private route: ActivatedRoute,
-      private router: Router
-    ){}
+export class AnnonceComponent implements OnInit {
 
   public selectedFile: File | null = null;
   public previewUrl: string | ArrayBuffer | null = null;
 
-  annonce : Annonces = new Annonces();
-  public responseData: any =null
-  public errorMessage: String =""
-  public editMode = false
-  
+  annonce: Annonces = new Annonces();
+  public responseData: any = null;
+  public errorMessage: string = "";
+  public editMode = false;
 
+  constructor(
+    private annonceService: AnnoncesService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
+  ngOnInit() {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.editMode = true;
+      this.loadAnnonces(parseInt(id, 10));
+    }
+  }
 
   private validateForm(): boolean {
     if (!this.annonce.titre || !this.annonce.description ||
@@ -40,23 +45,13 @@ export class AnnonceComponent {
     return true;
   }
 
-  ngOnInit(){
-    const id = this.route.snapshot.paramMap.get('id');
-    if(id){
-      this.editMode = true
-      this.loadAnnonces(parseInt(id))
-    }
-
-  }
-
-  loadAnnonces(id:number ):void{
+  loadAnnonces(id: number): void {
     this.annonceService.getAnnonceById(id).subscribe((res: any) => {
-      this.annonce = res
-      console.log(this.annonce)
+      this.annonce = res;
+      console.log(this.annonce);
     }, (error) => {
-      console.log(error)
-    })
-
+      console.log(error);
+    });
   }
 
   onFileSelected(event: any) {
@@ -74,9 +69,11 @@ export class AnnonceComponent {
 
   public addAnnonce(): void {
     if (!this.validateForm()) {
-      return
+      return;
     }
     this.annonce.user = localStorage.getItem("currentUser") || "";
+    this.annonce.status = "true";
+
     const formData = new FormData();
     formData.append('titre', this.annonce.titre);
     formData.append('description', this.annonce.description);
@@ -84,56 +81,51 @@ export class AnnonceComponent {
     formData.append('date', this.annonce.date);
     formData.append('contact', this.annonce.contact);
     formData.append('user', this.annonce.user);
+    formData.append('status', this.annonce.status ? 'true' : 'false');
 
-      if (this.selectedFile) {
-        formData.append('image', this.selectedFile);
-      }
+    if (this.selectedFile) {
+      formData.append('image', this.selectedFile);
+    }
 
     if (this.editMode) {
       this.annonceService.updateAnnonce(this.annonce).subscribe((res: any) => {
-        this.responseData = res
-        console.log(res)
-        this.router.navigate(['/annonces'])
+        this.responseData = res;
+        this.router.navigate(['/annonces']);
       }, (error) => {
-        console.log(error)
-        this.errorMessage = error
-      })
+        this.errorMessage = error;
+      });
 
     } else {
       this.annonceService.createAnnonce(formData).subscribe(
         (res: any) => {
-          this.responseData = res
-          console.log(res);
-          Number(localStorage.setItem('publicateur', this.responseData.userId));
-           Number(localStorage.setItem('publicateur', this.responseData.user.id))
-          localStorage.setItem('idannonce',this.responseData.id);
-          this.router.navigate(['/annonces'])
+          this.responseData = res;
+          localStorage.setItem('publicateur', this.responseData.user.id.toString());
+          localStorage.setItem('idannonce', this.responseData.id.toString());
+          this.router.navigate(['/annonces']);
         },
         (error) => {
-          console.log(error)
-          this.errorMessage = error.error.message
-        })
+          this.errorMessage = error.error.message;
+        });
     }
-
   }
 
-  private getCurrentPosition(){
-    return new Promise((resolve, reject)=>{
+  private getCurrentPosition() {
+    return new Promise((resolve, reject) => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
-          (position)=>{
-            if (position) {
-              this.annonce.latitude = position.coords.latitude
-              this.annonce.longitude = position.coords.longitude
-              console.log(this.annonce)
-              resolve(this.annonce)
-            }
+          (position) => {
+            this.annonce.latitude = position.coords.latitude;
+            this.annonce.longitude = position.coords.longitude;
+            resolve(this.annonce);
           },
-          (error) => console.log(error)
-        )}else{
-          reject('Ce navigateur ne supporte pas la géolocalisation')
-        }
-    })
+          (error) => {
+            console.log(error);
+            reject(error);
+          }
+        );
+      } else {
+        reject('Ce navigateur ne supporte pas la géolocalisation');
+      }
+    });
   }
-
 }

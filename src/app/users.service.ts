@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { roles } from './roles.service';
 
 export interface User {
   id: number;
@@ -9,6 +10,8 @@ export interface User {
   password: string; // Notez que vous ne devriez pas exposer le mot de passe comme cela
   name: string;
   phone: string;
+  role:roles;
+  
 }
 
 @Injectable({

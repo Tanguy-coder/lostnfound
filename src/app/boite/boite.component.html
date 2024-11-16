@@ -4,28 +4,26 @@
     <thead class="thead-light">
       <tr>
         <th>Conversations</th>
-        
       </tr>
     </thead>
     <tbody>
-      <!-- Boucle sur les annonces -->
-      <tr>
-        
-        <td colspan="2" *ngFor="let annonce of annonces">
-          <div *ngFor="let message of messages.slice(0, 1)">
-            <!-- Afficher uniquement les discussions où l'utilisateur est impliqué -->
-            <div *ngIf="(annonce.id === message.annonce.id) && 
-                         ((message.sender.id == m1 && message.receiver.id != m1) || 
-                          (message.sender.id != m1 && message.receiver.id == m1))" 
-                 class="message-item">
-              <!-- Bouton de navigation vers la discussion -->
-              <a [routerLink]="['/msg', annonce.id, message.receiver.id]" class="message-link">
-                <div class="message-header  justify-content-between">
-                  <strong style="font-size: 15px;">{{ message.sender.username }} &mdash; {{ message.receiver.username }}</strong>
+      <!-- Parcourir les annonces -->
+      <tr *ngFor="let annonce of annonces">
+        <td>
+          <!-- Parcourir les messages regroupés -->
+          <div *ngFor="let item of lastMessages">
+            <!-- Afficher le message s'il correspond à l'annonce actuelle ET si l'utilisateur m1 est le sender OU le receiver -->
+            <div *ngIf="item.message.annonce.id === annonce.id &&
+                         (item.message.sender.id === m1 || item.message.receiver.id === m1)">
+              <a [routerLink]="['/msg', annonce.id, item.message.receiver.id]" class="message-link">
+                <div class="message-header justify-content-between">
+                  <strong style="font-size: 15px;">
+                    {{ item.message.sender.username }} &mdash; {{ item.message.receiver.username }}
+                  </strong>
                   <span class="badge badge-info">{{ annonce.titre }}</span>
                 </div>
                 <div class="message-content">
-                  {{ message.content | slice: 0:50 }}...
+                  {{ item.message.content | slice: 0:50 }}...
                 </div>
               </a>
             </div>

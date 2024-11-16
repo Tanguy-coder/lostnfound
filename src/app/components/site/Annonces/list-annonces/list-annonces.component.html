@@ -13,7 +13,7 @@
                                 <input type="text" placeholder="Rechercher un objet" name="search" [(ngModel)]="searchTerm" class="form-control input-lg">
                                 <div class="input-group-btn">
                                     <button class="btn btn-lg btn-primary" type="submit">
-                                        Rechercher
+                                        <i class="fa fa-search"></i> Rechercher
                                     </button>
                                 </div>
                             </div>
@@ -24,16 +24,48 @@
                     <div *ngFor="let annonce of annonces | paginate: { itemsPerPage: 5, currentPage: page } | filter:searchTerm">
                         <div class="hr-line-dashed"></div>
                         <div class="search-result">
-                            <img [src]="'http://localhost:8080'+annonce.image" class="img-responsive m-b-xs" alt="profile" style="width: 100%;height: 200px;">
+                            <img [src]="'http://localhost:8080'+annonce.image" class="img-responsive m-b-xs" alt="profile" style="width: 220;height: 200px;">
                             <h3><a href="#">{{ annonce.titre }}</a></h3>
-
-                            <p class="search-link">
+                                
+                            <p class="search-link" *ngIf="current!=annonce.user.id">
                               {{ annonce.description }}
+                              publié par {{ annonce.user.name }}
                             </p>
-                            <div *ngIf="id_pub != current" >
-                                <a *ngIf="current == annonce.user.id" [routerLink]="['edit', annonce.id]" class="btn btn-primary" routerLinkActive="router-link-active">Editer</a>
+
+                              <p class="search-link" *ngIf="current==annonce.user.id">
+                              {{ annonce.description }}
+                              publié par {{ "vous" }}
+                            </p>
+
+
+
+
+                            <div>
+                                <!-- Bouton Editer -->
+                                <a *ngIf="current == annonce.user.id" [routerLink]="['edit', annonce.id]" class="btn btn-primary" routerLinkActive="router-link-active">
+                                    <i class="fa fa-edit"></i> Editer
+                                </a>
+                                
                                 &nbsp;
-                                <a [routerLink]="['/msg', annonce.id,annonce.user.id]" class="m-l-3 btn btn-warning" routerLinkActive="router-link-active">Message</a>
+
+                                <!-- Bouton Message -->
+                                <a *ngIf="annonce.user.id != current" [routerLink]="['/msg', annonce.id, annonce.user.id]" class="m-l-3 btn btn-warning" routerLinkActive="router-link-active">
+                                    <i class="fa fa-envelope"></i> Message
+                                </a>
+
+                                <!-- Bouton Valider -->
+                                <button *ngIf="annonce.status=='autre'" (click)="validerAnnonce(annonce.id)" class="btn btn-success m-l-3" hidden>
+                                    <i class="fa fa-check"></i> Valider
+                                </button>
+                                
+                                <button *ngIf="annonce.status=='autre'" class="btn btn-outline-success m-l-3" hidden>
+                                    ✅ Validée
+                                </button>
+
+                                <!-- Bouton Supprimer -->
+                                <button *ngIf="annonce.user.id == current || typeuser == 'SUPERADMIN' || typeuser == 'admin'" (click)="deleteAnnonce(annonce.id)" class="btn btn-danger m-l-3">
+                                    <i class="fa fa-trash"></i> Supprimer
+                                </button>
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
@@ -48,4 +80,4 @@
             </div>
         </div>
     </div>
-  </div>
+</div>

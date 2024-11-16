@@ -27,6 +27,9 @@ export class BoiteComponent implements OnInit {
   lastMessages: { participants: string, message: Message }[] = [];
   public annonces: Annonces[] = [];
   m1=Number(localStorage.getItem("currentUser"));
+  enregistrement:Message[]=[];
+  displayedAnnonces: Set<number> = new Set();
+  groupedMessages: { [key: string]: Message[] } = {};
 
 
   constructor(
@@ -47,10 +50,12 @@ export class BoiteComponent implements OnInit {
     this.getUsersFromMessages();
     this.getAnnonces();
     this.getAllMessages();
+    this.groupLastMessagesByDiscussion();
     
 
     const  userId=this.route.snapshot.paramMap.get("userId");
      
+    
 
     
 
@@ -111,6 +116,81 @@ export class BoiteComponent implements OnInit {
     );
   }
 
+  groupLastMessagesByDiscussion(): void {
+    // Récupérer les messages depuis le backend
+    this.httpClient.get<Message[]>('http://localhost:8080/messages', { responseType: 'json' }).subscribe(
+      (messages) => {
+        // Trier les messages par date d'envoi
+        this.messages = messages.sort((a, b) => new Date(a.sentAt).getTime() - new Date(b.sentAt).getTime());
+        console.log('Tous les messages récupérés:', this.messages);
+        
+        // Mettre à jour l'affichage
+        this.cdRef.detectChanges(); 
+  
+        // Créer une map pour regrouper les derniers messages
+        const lastMessagesMap = new Map<string, Message>();
+  
+        // Parcourir chaque message
+        this.messages.forEach((message: Message) => {
+          // Vérifiez que le message contient les propriétés nécessaires
+          if (!message.sender || !message.receiver || !message.annonce) {
+            console.warn('Message avec des propriétés manquantes:', message);
+            return; // Ignorer ce message s'il manque des informations essentielles
+          }
+  
+          // Vérifiez que les noms d'utilisateur sont présents
+          if (!message.sender.id || !message.receiver.id) {
+            console.warn('Nom d\'utilisateur manquant pour sender ou receiver:', message);
+            return; // Ignorer ce message si les noms d'utilisateur sont manquants
+          }
+  
+          // Créer une clé unique pour chaque combinaison de participants (sender/receiver) et l'annonce
+          const participantsKey = [
+            message.sender.id,
+            message.receiver.id
+          ].sort().join('-') + '-annonce-' + message.annonce.id;
+  
+          console.log('Participants Key:', participantsKey, 'Message:', message);
+  
+          // Si la discussion n'existe pas encore, ou si le message est plus récent, le mettre à jour
+          if (!lastMessagesMap.has(participantsKey) || lastMessagesMap.get(participantsKey)!.sentAt < message.sentAt) {
+            lastMessagesMap.set(participantsKey, message);
+            console.log('Message ajouté ou mis à jour:', message);
+          }
+        });
+  
+        // Transformer la Map en tableau pour l'affichage
+        this.lastMessages = Array.from(lastMessagesMap.entries()).map(([participants, message]) => ({
+          participants,
+          message
+        }));
+  
+        console.log('Derniers messages regroupés:', this.lastMessages);
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des messages:', error);
+      }
+    );
+  }
+  
+  
+
+  
+
+  
+
+
+
+
+
+
+
+  
+  
+
+
+
+
 
 
 
@@ -121,30 +201,18 @@ export class BoiteComponent implements OnInit {
     })
   }
 
-  // Regrouper et afficher uniquement le dernier message par discussion (sender/receiver) sans répétition
-  groupLastMessagesByDiscussion(): void {
-    const lastMessagesMap = new Map<string, Message>();
+ 
 
   
-    
 
-    this.messages.forEach((message: Message) => {
-      // Créer une clé unique pour chaque paire d'utilisateurs et l'annonce, peu importe l'ordre (sender/receiver ou receiver/sender)
-      const participantsKey = [message.sender.username, message.receiver.username].sort().join('-') + '-annonce-' + message.annonce.id;
 
-      // Si la discussion entre ces participants et cette annonce n'existe pas encore, ou si le message est plus récent
-      if (!lastMessagesMap.has(participantsKey) || lastMessagesMap.get(participantsKey)!.sentAt < message.sentAt) {
-        lastMessagesMap.set(participantsKey, message);
-        
-      }
-    });
 
-    // Transformer le Map en tableau pour l'affichage
-    this.lastMessages = Array.from(lastMessagesMap.entries()).map(([participants, message]) => ({
-      participants,
-      message
-    }));
 
-   
-  }
+
+
+
+
+
+
+  
 }

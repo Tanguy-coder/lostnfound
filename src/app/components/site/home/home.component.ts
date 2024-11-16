@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { User } from '../../../users.service';
 
 @Component({
   selector: 'app-home',
@@ -8,5 +9,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./home.component.css',]
 })
 export class HomeComponent {
+
+
+  users: User[] = [];
 
 }
