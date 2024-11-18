@@ -36,7 +36,7 @@ export class LoginComponent {
         localStorage.setItem('email',response.email);
         localStorage.setItem('usertype',String(response.role.name));
         console.log('la valeur de current:'+localStorage.getItem('currentUser'));
-        console.log("le mail:"+localStorage.getItem('email'));
+        
         console.log("usertype:"+localStorage.getItem('usertype'));
         
         

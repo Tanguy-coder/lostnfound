@@ -30,7 +30,7 @@ export class ListAnnoncesComponent {
   current=Number(localStorage.getItem("currentUser"));
   page: number = 1;
   searchTerm: string = ''; // Terme de recherche
-  lemail=localStorage.getItem('email');
+  //lemail=localStorage.getItem('email');
   typeuser=(localStorage.getItem('usertype'));
 
   public getAnnonces(): void {
@@ -75,6 +75,7 @@ export class ListAnnoncesComponent {
       }, error => {
         console.error("Erreur lors de la suppression de l'annonce :", error);
         alert("Une erreur est survenue lors de la suppression."); // Message d'erreur
+        this.cdref.detectChanges();
       });
     } else {
       console.log("Suppression annulée."); // Journalisation si l'utilisateur annule l'action
