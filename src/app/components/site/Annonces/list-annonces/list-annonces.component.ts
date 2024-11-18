@@ -36,7 +36,7 @@ export class ListAnnoncesComponent {
   public getAnnonces(): void {
     this.annoncesService.getAnnonces().subscribe((liste) => {
       this.annonces = liste
-
+      this.cdref.detectChanges();
       
     })
   }
@@ -64,27 +64,28 @@ export class ListAnnoncesComponent {
 
 
 
-
-
-  public deleteAnnonce(id: number): void {
-    // Utilisation de la boîte de dialogue de confirmation native du navigateur
-    if (window.confirm("Êtes-vous sûr de vouloir supprimer cette annonce ?")) {
-      this.annoncesService.deleteAnnonce(id).subscribe(() => {
-        this.getAnnonces(); // Rafraîchit la liste des annonces après suppression
-        alert("Annonce supprimée avec succès !"); // Affiche un message de confirmation
-      }, error => {
-        console.error("Erreur lors de la suppression de l'annonce :", error);
-        alert("Une erreur est survenue lors de la suppression."); // Message d'erreur
-        this.cdref.detectChanges();
-      });
-    } else {
-      console.log("Suppression annulée."); // Journalisation si l'utilisateur annule l'action
+  deleteAnnonce(annonceId: number): void {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cette annonce ?')) {
+      this.annoncesService.deleteAnnonce(annonceId).subscribe(
+        (response) => { 
+          console.log('Annonce supprimée avec succes');
+          alert("Annonce supprimée avec succès");
+          this.getAnnonces();
+          this.cdref.markForCheck();
+  
+          // Détecte les changements
+          this.cdref.detectChanges();
+        },
+        (error) => {
+          console.error('Erreur lors de la suppression de l\'annonce', error);
+        }
+      );
     }
   }
-  
 
   ngOnInit() : void{
     this.getAnnonces()
+    
 
     console.log("current",this.current)
     console.log("pub"+ this.id_pub)

@@ -25,7 +25,7 @@
                         <div class="hr-line-dashed"></div>
                         <div class="search-result">
                             <img [src]="'http://localhost:8080'+annonce.image" class="img-responsive m-b-xs" alt="profile" style="width: 220;height: 200px;">
-                            <h3><a href="#">{{ annonce.titre }}</a>  {{'http://localhost:8080'+annonce.image }}   </h3>
+                            <h3><a href="#">{{ annonce.titre }}</a>    </h3>
                                 
                             <p class="search-link" *ngIf="current!=annonce.user.id">
                               {{ annonce.description }}
@@ -54,7 +54,7 @@
                                 </a>
 
                                 <!-- Bouton Valider -->
-                                <button *ngIf="annonce.status=='false'" (click)="validerAnnonce(annonce.id)" class="btn btn-success m-l-3" hidden>
+                                <button *ngIf="annonce.status=='false' && annonce.user.id == current" (click)="validerAnnonce(annonce.id)" class="btn btn-success m-l-3" hidden>
                                     <i class="fa fa-check"></i> Valider
                                 </button>
                                 
