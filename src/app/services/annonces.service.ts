@@ -36,10 +36,14 @@ export class AnnoncesService {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 
-  
+
 
   validerAnnonce(annonceId: number): Observable<any> {
     return this.http.put(`${this.baseUrl}/${annonceId}/valider`, {});
+  }
+
+  getLatestAnnonces():Observable<any[]> {
+    return this.http.get<[Annonces]>(`${this.baseUrl}/latest`);
   }
 
 }

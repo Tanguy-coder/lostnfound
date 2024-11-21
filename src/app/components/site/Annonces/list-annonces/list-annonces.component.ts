@@ -36,8 +36,6 @@ export class ListAnnoncesComponent {
   public getAnnonces(): void {
     this.annoncesService.getAnnonces().subscribe((liste) => {
       this.annonces = liste
-
-      
     })
   }
 
@@ -56,11 +54,11 @@ export class ListAnnoncesComponent {
         }
       });
   }
-  
-  
-  
-  
-  
+
+
+
+
+
 
 
 
@@ -81,7 +79,7 @@ export class ListAnnoncesComponent {
       console.log("Suppression annulée."); // Journalisation si l'utilisateur annule l'action
     }
   }
-  
+
 
   ngOnInit() : void{
     this.getAnnonces()

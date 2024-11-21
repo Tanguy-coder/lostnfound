@@ -14,7 +14,7 @@
             >
               <i class="fa fa-reorder"></i>
             </button>
-            <a href="#" class="navbar-brand">Inspinia </a>
+            <a href="#" class="navbar-"><img src="/assets/img/site/logo2.png" alt="" width="150"> </a>
           </div>
           <div class="navbar-collapse collapse pull-right" id="navbar">
             <ul class="nav navbar-nav">
@@ -33,18 +33,18 @@
                   class="dropdown-toggle"
                   data-toggle="dropdown"
                 >
-                  Menu item <span class="caret"></span>
+                  <span class="fa fa-cog"></span><span class="caret"></span>
                 </a>
                 <ul role="menu" class="dropdown-menu">
-                  <li><a [href]="'/user/' + currentUser">Données utilisateur</a></li>
-                  <li><a href="">Menu item</a></li>
+                  <li><a [href]="'/user/' + currentUser"> <i class="fa fa-user"></i> Profil</a></li>
+                  <li><a (click)="logout()"><i class="fa fa-sign-out"></i> Déconnexion</a></li>
                 </ul>
               </li>
             </ul>
             <ul class="nav navbar-top-links navbar-right">
               <!-- Icône de notification -->
               <li class="dropdown" >
-                <a 
+                <a
                   aria-expanded="false"
                   role="button"
                   href="#"
@@ -52,13 +52,13 @@
                   data-toggle="dropdown"
                 >
                   <i class="fa fa-bell" ></i>
-                
+
                   <span  class="badge badge-danger">
                             {{ annonces.length}}
                   </span>
                 </a>
                 <ul role="menu" class="dropdown-menu">
-                  
+
                   <li *ngFor="let annonce of annonces" >
                     <a href="#" *ngFor="let message of messages"> {{ annonce.user}}</a>
                   </li>
@@ -67,7 +67,7 @@
                   </li>
                 </ul>
               </li>
-              <li><a (click)="logout()"><i class="fa fa-sign-out"></i> Log out</a></li>
+
             </ul>
           </div>
         </nav>
@@ -78,8 +78,8 @@
         </div>
       </div>
       <div class="footer">
-        <div class="pull-right">10GB of <strong>250GB</strong> Free.</div>
-        <div><strong>Copyright</strong> Example Company &copy; 2024</div>
+        <div class="pull-right">LOSTNFOUND</div>
+        <div><strong>Copyright</strong> UNCHK &copy; 2024</div>
       </div>
     </div>
   </div>

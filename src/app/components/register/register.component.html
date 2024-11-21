@@ -1,10 +1,8 @@
 <div class="middle-box loginscreen animated fadeInDown ">
   <div>
-      <div>
-
-          <h4 class="logo-name">IN+</h4>
-
-      </div>
+    <div>
+      <img src="/assets/img/site/logo2.png" alt="" srcset="" width="300" height="200">
+  </div>
       <h3 class="text-center">Bienvenue LNF</h3>
       <p  class="text-center">Veuillez vous inscrire.</p>
       <span class="text-danger">{{ errorMessage }}</span>
@@ -41,7 +39,7 @@
           </div>
           <div class="form-group" hidden >
             <input hidden type="text" class="form-control" name="role" [(ngModel)]="formData.role" required="" disabled="">
-            
+
             <div class="text-danger" c *ngIf="myForm.submitted && !myForm.controls['role']?.valid">
               Veuillez sélectionner un élément dans la liste
             </div>
