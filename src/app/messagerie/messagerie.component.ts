@@ -27,6 +27,7 @@ export class MessagerieComponent implements OnInit, OnDestroy {
   public annonceur_id : string = '';
   public annonceur : any = [];
   public sender : any = [];
+  public receiver : any = {};
   m1=Number(localStorage.getItem("currentUser"));
   s1=Number(localStorage.getItem("publicateur"));
   lastMessages: { participants: string, message: Message }[] = [];
@@ -49,12 +50,10 @@ export class MessagerieComponent implements OnInit, OnDestroy {
     const userId2=(this.route.snapshot.paramMap.get("annonce.user.id"));
 
     console.log("id "+id+"userId2"+userId2 +"m1 :"+this.m1);
-    this.getAllMessages();
+    
    //this.groupLastMessagesByDiscussion();
     
-
-    
-    
+   
     
     if(id){
       this.loadUser(this.m1)
@@ -62,6 +61,7 @@ export class MessagerieComponent implements OnInit, OnDestroy {
 
       this.getMessagesByUser(this.m1,Number(userId2),parseInt(id));
       this.getAnnonces();
+      this.getAllMessages();
     }
     // Souscrire aux messages reçus
     this.webSocketService.getMessages().subscribe((message: Message) => {
@@ -101,6 +101,8 @@ export class MessagerieComponent implements OnInit, OnDestroy {
       return;
     }
 
+    //this.annonceur=(this.route.snapshot.paramMap.get("annonce.user.id"));
+
     if (!this.annonce || !this.annonce.id || !this.annonceur) {
       console.error('Données manquantes pour l\'envoi du message.');
       return;
@@ -115,8 +117,10 @@ export class MessagerieComponent implements OnInit, OnDestroy {
       sentAt: new Date()
     };
 
+    console.log("sender"+this.sender.id+"receveeur"+this.annonceur.id);
 
     this.webSocketService.sendMessage(message);
+    console.log("le message a envoyer"+message.receiver.id);
     this.newMessage = ''; // Réinitialiser le champ du message
 
    // console.log("affichage"+this.annonceur.id +"||" + this.annonce.id+'||'+this.sender.id);

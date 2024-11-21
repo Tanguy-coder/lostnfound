@@ -5,7 +5,9 @@
     <div class="ibox-content">
       <div class="chat-discussion">
         <div *ngFor="let message of messages">
-          <div *ngIf="message.sender.id == m1 || message.receiver.id == m1">
+        
+          <div *ngIf="message.sender.id == m1 || message.receiver.id == m1 ">
+            
             <div 
               [ngClass]="{'chat-message left': message.sender.id !== m1, 
                           'chat-message right': message.sender.id === m1}">
@@ -13,7 +15,7 @@
               <div class="message">
                 <a class="message-author" href="#">
                   <div *ngIf="message.sender.id === m1">
-                    {{ message.receiver.username }}
+                    {{ message.sender.username }}  
                   </div>
                   <div *ngIf="message.receiver.id === m1">
                     {{ message.sender.username }}
@@ -23,7 +25,7 @@
                 <span class="message-content">{{ message.content }}</span>
               </div>
             </div>
-          </div>
+        </div>
         </div>
       </div>
   
